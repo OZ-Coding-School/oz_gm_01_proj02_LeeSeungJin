@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7636881210484582791}
   - component: {fileID: 1327245545634997924}
   - component: {fileID: 1815972838763919068}
+  - component: {fileID: 2293446580434882044}
   m_Layer: 0
   m_Name: OrangeBubble
-  m_TagString: Untagged
+  m_TagString: Bubble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,4 +148,16 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!114 &2293446580434882044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8175529308079171552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbafc9fd7821570418d136690e82ddf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

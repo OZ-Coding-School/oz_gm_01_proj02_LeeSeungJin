@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 5847254898179200828}
   - component: {fileID: 1316205281323557514}
   - component: {fileID: 3020279404286581163}
+  - component: {fileID: -6434735965290988096}
   m_Layer: 0
   m_Name: VioletBubble
-  m_TagString: Untagged
+  m_TagString: Bubble
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,4 +148,16 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!114 &-6434735965290988096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7568707212635654600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbafc9fd7821570418d136690e82ddf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
