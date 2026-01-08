@@ -161,3 +161,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbafc9fd7821570418d136690e82ddf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubbleColor: Yellow

@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -104,7 +104,14 @@ MonoBehaviour:
   maxAngle: 60
   bubbleSpeed: 10
   firePoint: {fileID: 5854630089426823267}
-  bubblePrefab: {fileID: 4070677556045622539, guid: ba0bac58fb7d8e346adc55014d88a12b, type: 3}
+  bubblePrefab:
+  - {fileID: 4070677556045622539, guid: ba0bac58fb7d8e346adc55014d88a12b, type: 3}
+  - {fileID: 8175529308079171552, guid: 5255a58207fe0ba4ab53694d12094145, type: 3}
+  - {fileID: 5819368983255871632, guid: 03abd9cfa699f7645a2376cd3c74ed3a, type: 3}
+  - {fileID: 3266589938849061328, guid: b35316afde817ac4ab71e6c8beca3df1, type: 3}
+  - {fileID: 8942112753863453438, guid: 6194af3cdae8b344b95ec25afa31dca1, type: 3}
+  - {fileID: 3216547387004765693, guid: 8ca81dff48a0bc64cbf0584d4ee96eae, type: 3}
+  - {fileID: 7568707212635654600, guid: a9abce915a7c9bb42a56a6ebf789c162, type: 3}
 --- !u!1 &6220995776899933065
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +215,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1006678857, guid: c75c8bde7ad6c7c419d7b6117453eb8e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

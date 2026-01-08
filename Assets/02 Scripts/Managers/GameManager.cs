@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public enum GameState { None, Playing, Paused, GameOver }
     public GameState CurrentState { get; private set; } = GameState.None;
