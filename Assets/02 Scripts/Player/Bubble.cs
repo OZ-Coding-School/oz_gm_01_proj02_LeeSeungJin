@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class Bubble : MonoBehaviour
 {
+    public enum BubbleState { Idle, Fired, Falling }
+    public BubbleState State { get; private set; }
+
     [SerializeField] private string bubbleColor;
     private Rigidbody2D _rb;
     private Collider2D _col;
 
     public string Color => bubbleColor;
-
     public GameObject PrefabReference { get; private set; }
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+        _col = GetComponent<Collider2D>();
+    }
 
     // 팩토리 메서드: 풀에서 꺼내올 때 자동 초기화
     public static Bubble CreateFromPool(GameObject prefab, Vector3 position, Quaternion rotation)
@@ -19,41 +27,58 @@ public class Bubble : MonoBehaviour
         Bubble bubble = obj.GetComponent<Bubble>();
         bubble.PrefabReference = prefab;
 
-        // Rigidbody 초기화
-        Rigidbody2D rb = bubble.GetComponent<Rigidbody2D>();
-        rb.isKinematic = true;
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0f;
-
-        // Collider 초기화
-        Collider2D col = bubble.GetComponent<Collider2D>();
-        if (col != null) col.enabled = true;
+        bubble.SetState(BubbleState.Idle);
 
         return bubble;
     }
-    // 풀로 반환
-    public void ReturnToPool()
+
+    // 상태 전환
+    public void SetState(BubbleState newState)
     {
-        PoolManager.Instance.ReturnToPool(PrefabReference, gameObject);
+        State = newState;
+
+        switch (State)
+        {
+            case BubbleState.Idle:
+                _rb.bodyType = RigidbodyType2D.Kinematic;
+                _rb.velocity = Vector2.zero;
+                _rb.gravityScale = 0f;
+                if (_col != null) _col.enabled = true;
+                break;
+
+            case BubbleState.Fired:
+                _rb.bodyType = RigidbodyType2D.Dynamic;
+                _rb.gravityScale = 0f;
+                if (_col != null) _col.enabled = true;
+                break;
+
+            case BubbleState.Falling:
+                _rb.bodyType = RigidbodyType2D.Dynamic;
+                _rb.gravityScale = 1f;
+                if (_col != null) _col.enabled = false;
+                Invoke(nameof(ReturnToPool), 2f);
+                break;
+        }
     }
 
-    private void Awake()
+    // 발사 처리
+    public void Fire(Vector2 direction, float speed)
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _col = GetComponent<Collider2D>();
+        SetState(BubbleState.Fired);
+        _rb.velocity = direction.normalized * speed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {   
+    {
         if (collision.gameObject.CompareTag("TopWall") || collision.gameObject.CompareTag("Bubble"))
         {
             AttachToGrid();
         }
     }
+
     private void AttachToGrid()
     {
-        _rb.velocity = Vector2.zero;
-        _rb.isKinematic = true;
+        SetState(BubbleState.Idle);
 
         // 그리드 좌표 변환
         Vector2 pos = transform.position;
@@ -66,14 +91,15 @@ public class Bubble : MonoBehaviour
         transform.position = BubbleManager.Instance.GridToWorld(row, col);
         transform.SetParent(BubbleManager.Instance.transform);
     }
+
     public void Fall()
     {
-        // 실제 낙하 연출
-        _rb.isKinematic = false;
-        _rb.gravityScale = 1f;
-        _col.enabled = false;
+        SetState(BubbleState.Falling);
+    }
 
-        // 일정 시간 후 풀 반환
-        Invoke(nameof(ReturnToPool), 2f);
+    // 풀 반환
+    public void ReturnToPool()
+    {
+        PoolManager.Instance.ReturnToPool(PrefabReference, gameObject);
     }
 }

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject[] bubblePrefab;
     [SerializeField] private Image previewImage;
+    [SerializeField] private BubbleTrajectory trajectory;
 
     private GameObject currentBubblePrefab;
 
@@ -23,6 +24,11 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleInput();
+    }
+    private void FixedUpdate()
+    {
+        // 발사 궤적은 물리 주기에서 갱신
+        trajectory.ShowTrajectory(firePoint.position, transform.up, bubbleSpeed);
     }
 
     private void HandleInput()
@@ -45,12 +51,10 @@ public class PlayerController : MonoBehaviour
     private void FireBubble()
     {
         Bubble bubble = Bubble.CreateFromPool(currentBubblePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody2D rb = bubble.GetComponent<Rigidbody2D>();
-        rb.velocity = transform.up.normalized * bubbleSpeed;
+        bubble.Fire(transform.up, bubbleSpeed);
 
         PrepareCurrentBubble();
     }
-
     private void PrepareCurrentBubble()
     {
         currentBubblePrefab = bubblePrefab[Random.Range(0, bubblePrefab.Length)];

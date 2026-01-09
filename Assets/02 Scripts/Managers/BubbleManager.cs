@@ -12,6 +12,8 @@ public class BubbleManager : Singleton<BubbleManager>
     // 그리드 원점 조정
     [SerializeField] private Vector2 gridOrigin = Vector2.zero;
 
+    [SerializeField] private WallPressureSystem wallPressureSystem;
+
     private Bubble[,] grid;
 
     protected override void Awake()
@@ -31,7 +33,12 @@ public class BubbleManager : Singleton<BubbleManager>
         {
             grid[row, col] = bubble;
             CheckMatch(row, col);
+            Invoke(nameof(WallDown), 0.05f);
         }
+    }
+    private void WallDown() 
+    {
+        wallPressureSystem.OnPlayerShot();
     }
 
     // 월드 → 그리드 좌표 변환 (원점 기준 + Floor 안정화)
@@ -46,8 +53,6 @@ public class BubbleManager : Singleton<BubbleManager>
 
         row = Mathf.Clamp(row, 0, rows - 1);
         col = Mathf.Clamp(col, 0, cols - 1);
-
-        Debug.Log($"WorldToGrid: pos={pos}, row={row}, col={col}");
     }
 
     // 그리드 → 월드 좌표 변환
@@ -106,8 +111,6 @@ public class BubbleManager : Singleton<BubbleManager>
                     grid[r, c] = null;
                 }
             }
-            Debug.Log($"매칭 성공: {connected.Count}개 제거");
-
             HandleFloatingBubbles();
         }
     }
@@ -135,8 +138,6 @@ public class BubbleManager : Singleton<BubbleManager>
             neighbors.Add((row + 1, col));
             neighbors.Add((row + 1, col + 1));
         }
-
-        Debug.Log($"GetNeighbors: row={row}, col={col}, count={neighbors.Count}");
         return neighbors;
     }
 
@@ -193,7 +194,34 @@ public class BubbleManager : Singleton<BubbleManager>
         }
     }
 
-//========================================================================
+    // 버블 배열 아래로 이동
+    public void ApplyPressure(int moveRows = 2)
+    {
+        for (int r = rows - 1; r >= 0; r--)
+        {
+            for (int c = 0; c < cols; c++)
+            {
+                Bubble bubble = grid[r, c];
+                if (bubble != null)
+                {
+                    int newRow = r + moveRows;
+                    if (newRow < rows)
+                    {
+                        grid[newRow, c] = bubble;
+                        grid[r, c] = null;
+                        bubble.transform.position = GridToWorld(newRow, c);
+                    }
+                    else
+                    {
+                        // 바닥에 닿으면 게임오버 처리
+                        bubble.Fall();
+                    }
+                }
+            }
+        }
+    }
+
+    //========================================================================
     // Scene 뷰에서 그리드 시각화
     private void OnDrawGizmos()
     {

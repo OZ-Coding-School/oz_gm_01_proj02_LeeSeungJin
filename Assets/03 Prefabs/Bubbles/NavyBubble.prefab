@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8864395014238538512}
   - component: {fileID: 6871735816595779666}
   - component: {fileID: 2958964834532108023}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: NavyBubble
   m_TagString: Bubble
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3
+  m_Radius: 1.2
 --- !u!50 &6871735816595779666
 Rigidbody2D:
   serializedVersion: 4

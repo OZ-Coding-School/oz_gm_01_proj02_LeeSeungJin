@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4735364568869902355}
   - component: {fileID: 7237407057175243543}
   - component: {fileID: 4877605344620342967}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: YellowBubble
   m_TagString: Bubble
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3
+  m_Radius: 1.2
 --- !u!50 &7237407057175243543
 Rigidbody2D:
   serializedVersion: 4

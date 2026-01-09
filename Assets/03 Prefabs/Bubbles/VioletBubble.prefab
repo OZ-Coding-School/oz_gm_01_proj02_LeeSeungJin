@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1316205281323557514}
   - component: {fileID: 3020279404286581163}
   - component: {fileID: -6434735965290988096}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: VioletBubble
   m_TagString: Bubble
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3
+  m_Radius: 1.2
 --- !u!50 &3020279404286581163
 Rigidbody2D:
   serializedVersion: 4

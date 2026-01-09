@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5793228001058439915}
   - component: {fileID: 8520789975565157316}
   - component: {fileID: 7907856380897808976}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BlueBubble
   m_TagString: Bubble
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.3
+  m_Radius: 1.2
 --- !u!50 &8520789975565157316
 Rigidbody2D:
   serializedVersion: 4
