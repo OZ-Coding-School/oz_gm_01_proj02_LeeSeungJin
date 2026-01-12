@@ -5,10 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class BubbleTrajectory : MonoBehaviour
 {
-    [SerializeField] private float stepSize = 0.3f;          // 시뮬레이션 이동 단위
-    [SerializeField] private int maxSteps = 100;             // 최대 시뮬레이션 스텝 수
-    [SerializeField] private int maxReflectionCount = 3;     // 최대 반사 횟수
-    [SerializeField] private LayerMask collisionMask;        // 벽 + 버블 + 천장 포함
+    [SerializeField] private float stepSize = 0.3f;  // 시뮬레이션 이동 단위
+    [SerializeField] private int maxSteps = 100;  // 최대 시뮬레이션 스텝 수
+    [SerializeField] private int maxReflectionCount = 3;  // 최대 반사 횟수
+    [SerializeField] private LayerMask collisionMask;  // 벽 + 버블 + 천장 포함
 
     private LineRenderer lineRenderer;
 
@@ -53,7 +53,7 @@ public class BubbleTrajectory : MonoBehaviour
                     vel = Vector2.Reflect(vel, normal);
                     pos = hit.point + vel.normalized * 0.01f; // 살짝 앞으로 이동
                     reflectionCount++;
-                    continue; // 시뮬레이션 계속
+                    continue;
                 }
                 else
                 {

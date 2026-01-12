@@ -16,6 +16,7 @@ public class BubbleManager : Singleton<BubbleManager>
 
     private Bubble[,] grid;
     private int ceilingRow = 0;
+    private bool bubbleAttachedThisTurn = false;
 
     protected override void Awake()
     {
@@ -28,7 +29,7 @@ public class BubbleManager : Singleton<BubbleManager>
     }
 
     // 버블 등록
-    public void RegisterBubble(Bubble bubble, int row, int col, bool fromPressure = false)
+    public void RegisterBubble(Bubble bubble, int row, int col)
     {
         if (!IsValidCell(row, col)) return;
 
@@ -38,10 +39,14 @@ public class BubbleManager : Singleton<BubbleManager>
         bool matched = CheckMatch(row, col);
         if (matched) HandleFloatingBubbles();
 
-        // 압박 이동이 아닌 경우에만 카운트
-        if (!fromPressure && grid[row, col] != null)
+        bubbleAttachedThisTurn = true; // 이번 턴에 붙음 표시
+    }
+    public void EndTurn()
+    {
+        if (bubbleAttachedThisTurn)
         {
-           wallPressureSystem.OnBubbleAttached();
+            WallPressureSystem.Instance.OnBubbleAttached();
+            bubbleAttachedThisTurn = false;
         }
     }
 

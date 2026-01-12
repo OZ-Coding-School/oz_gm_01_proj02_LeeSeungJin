@@ -5,7 +5,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    protected virtual bool IsDDOL { get; private set; } = true;
+    protected virtual bool IsDDOL => true;
     public static T Instance
     {
         get
