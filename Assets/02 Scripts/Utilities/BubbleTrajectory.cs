@@ -33,7 +33,7 @@ public class BubbleTrajectory : MonoBehaviour
 
             // 충돌 체크
             RaycastHit2D hit = Physics2D.Linecast(pos, nextPos, collisionMask);
-
+            
             if (hit.collider != null)
             {
                 lineRenderer.positionCount++;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-
+    protected virtual bool IsDDOL { get; private set; } = true;
     public static T Instance
     {
         get
@@ -20,7 +20,11 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     GameObject obj = new GameObject(typeof(T).Name);
                     _instance = obj.AddComponent<T>();
-                    DontDestroyOnLoad(obj);
+                    var singleton = _instance as Singleton<T>;
+                    if (singleton != null && singleton.IsDDOL)
+                    {
+                        DontDestroyOnLoad(obj);
+                    }
                 }
             }
             return _instance;
@@ -32,11 +36,11 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         if (_instance == null)
         {
             _instance = this as T;
-            DontDestroyOnLoad(gameObject);
+            if(IsDDOL)DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
-            Destroy(gameObject); // 중복 방지
+            Destroy(gameObject);
         }
     }
 }

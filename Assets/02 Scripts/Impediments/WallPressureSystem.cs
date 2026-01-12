@@ -6,43 +6,41 @@ public class WallPressureSystem : MonoBehaviour
 {
     [SerializeField] private Transform ceiling;
     [SerializeField] private float moveDistance = 0.5f; // 내려오는 거리
-    [SerializeField] private int shotsPerPressure = 7;   // x번 발사마다 압박
-    [SerializeField] private float shotTimeLimit = 10f;  // 발사 제한시간
+    [SerializeField] private int attachPerPressure = 7; // x번 버블 붙으면 압박
+    [SerializeField] private float attachTimeLimit = 10f;  // 발사 제한시간
 
-    private int shotCount = 0;
-    private float shotTimer = 0f;
-    private bool waitingForShot = true;
+    private int attachCount = 0;
+    private float attachTimer = 0f;
+    private bool waitingForAttach = true;
 
     private void Update()
     {
-        if (waitingForShot)
+        if (waitingForAttach)
         {
-            shotTimer += Time.deltaTime;
-            if (shotTimer >= shotTimeLimit)
+            attachTimer += Time.deltaTime;
+            if (attachTimer >= attachTimeLimit)
             {
-                ApplyPressure(); // 시간 초과 시 압박
-                ResetShotTimer();
+                ApplyPressure();
+                ResetAttachTimer();
             }
         }
     }
 
-    public void OnPlayerShot()
+    public void OnBubbleAttached()
     {
-        shotCount++;
-        ApplyShotPressureCheck();
-        ResetShotTimer();
-        Debug.Log($"count : {shotCount}  timer : {shotTimer}");
+        attachCount++;
+        ApplyAttachPressureCheck();
+        ResetAttachTimer();
     }
 
-    private void ApplyShotPressureCheck()
+    private void ApplyAttachPressureCheck()
     {
-        if (shotCount >= shotsPerPressure)
+        if (attachCount >= attachPerPressure)
         {
             ApplyPressure();
-            shotCount = 0;
+            attachCount = 0;
         }
     }
-
     private void ApplyPressure()
     {
         ceiling.position += Vector3.down * moveDistance;
@@ -50,12 +48,10 @@ public class WallPressureSystem : MonoBehaviour
 
         Debug.Log("벽 압박 발생!");
     }
-
-
-    private void ResetShotTimer()
+    private void ResetAttachTimer()
     {
-        shotTimer = 0f;
-        waitingForShot = true;
+        attachTimer = 0f;
+        waitingForAttach = true;
     }
 
 }

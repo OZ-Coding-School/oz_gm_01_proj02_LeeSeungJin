@@ -15,6 +15,7 @@ public class BubbleManager : Singleton<BubbleManager>
     [SerializeField] private WallPressureSystem wallPressureSystem;
 
     private Bubble[,] grid;
+    private int ceilingRow = 0;
 
     protected override void Awake()
     {
@@ -27,29 +28,33 @@ public class BubbleManager : Singleton<BubbleManager>
     }
 
     // 버블 등록
-    public void RegisterBubble(Bubble bubble, int row, int col)
+    public void RegisterBubble(Bubble bubble, int row, int col, bool fromPressure = false)
     {
-        if (IsValidCell(row, col))
+        if (!IsValidCell(row, col)) return;
+
+        grid[row, col] = bubble;
+        bubble.transform.position = GridToWorld(row, col);
+
+        bool matched = CheckMatch(row, col);
+        if (matched) HandleFloatingBubbles();
+
+        // 압박 이동이 아닌 경우에만 카운트
+        if (!fromPressure && grid[row, col] != null)
         {
-            grid[row, col] = bubble;
-            CheckMatch(row, col);
-            Invoke(nameof(WallDown), 0.05f);
+           wallPressureSystem.OnBubbleAttached();
         }
     }
-    private void WallDown() 
-    {
-        wallPressureSystem.OnPlayerShot();
-    }
 
-    // 월드 → 그리드 좌표 변환 (원점 기준 + Floor 안정화)
+
+    // 월드 → 그리드 좌표 변환
     public void WorldToGrid(Vector2 pos, out int row, out int col)
     {
         float localX = pos.x - gridOrigin.x;
-        float localY = gridOrigin.y - pos.y; // 위에서 아래로 증가하도록 반전
+        float localY = gridOrigin.y - pos.y;
 
-        row = Mathf.FloorToInt(localY / cellSize + 0.5f);
+        row = Mathf.RoundToInt(localY / cellSize);
         float offset = (row % 2 == 1) ? cellSize * 0.5f : 0f;
-        col = Mathf.FloorToInt((localX - offset) / cellSize + 0.5f);
+        col = Mathf.RoundToInt((localX - offset) / cellSize);
 
         row = Mathf.Clamp(row, 0, rows - 1);
         col = Mathf.Clamp(col, 0, cols - 1);
@@ -70,12 +75,12 @@ public class BubbleManager : Singleton<BubbleManager>
     }
 
     // DFS 방식으로 매칭 판정
-    private void CheckMatch(int startRow, int startCol)
+    private bool CheckMatch(int startRow, int startCol)
     {
         Bubble startBubble = grid[startRow, startCol];
-        if (startBubble == null) return;
+        if (startBubble == null) return false;
 
-        string color = startBubble.Color;
+        Bubble.BubbleColor color = startBubble.Color;
         List<(int, int)> connected = new List<(int, int)>();
         bool[,] visited = new bool[rows, cols];
 
@@ -99,7 +104,6 @@ public class BubbleManager : Singleton<BubbleManager>
                 }
             }
         }
-
         if (connected.Count >= 3)
         {
             foreach (var (r, c) in connected)
@@ -111,15 +115,15 @@ public class BubbleManager : Singleton<BubbleManager>
                     grid[r, c] = null;
                 }
             }
-            HandleFloatingBubbles();
+            return true;
         }
+        return false;
     }
 
     // 인접 6방향 탐색
     private List<(int, int)> GetNeighbors(int row, int col)
     {
         List<(int, int)> neighbors = new List<(int, int)>();
-
         if (row % 2 == 0) // 짝수 줄
         {
             neighbors.Add((row, col - 1));
@@ -146,16 +150,14 @@ public class BubbleManager : Singleton<BubbleManager>
     {
         bool[,] visited = new bool[rows, cols];
 
-        // 천장(0번째 row)에 붙은 버블들부터 DFS 탐색
         for (int c = 0; c < cols; c++)
         {
-            if (grid[0, c] != null)
+            if (grid[ceilingRow, c] != null)
             {
-                MarkConnectedDFS(0, c, visited);
+                MarkConnectedDFS(ceilingRow, c, visited);
             }
         }
 
-        // 방문되지 않은 버블은 떨어짐 처리
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < cols; c++)
@@ -185,7 +187,6 @@ public class BubbleManager : Singleton<BubbleManager>
             if (b != null)
             {
                 visited[r, c] = true;
-
                 foreach (var (nr, nc) in GetNeighbors(r, c))
                 {
                     stack.Push((nr, nc));
@@ -194,7 +195,7 @@ public class BubbleManager : Singleton<BubbleManager>
         }
     }
 
-    // 버블 배열 아래로 이동
+    // 압박 시 그리드 전체 이동 (2칸 단위 + 원점 이동)
     public void ApplyPressure(int moveRows = 2)
     {
         for (int r = rows - 1; r >= 0; r--)
@@ -210,16 +211,21 @@ public class BubbleManager : Singleton<BubbleManager>
                         grid[newRow, c] = bubble;
                         grid[r, c] = null;
                         bubble.transform.position = GridToWorld(newRow, c);
+                        bubble.transform.SetParent(transform);
                     }
                     else
                     {
-                        // 바닥에 닿으면 게임오버 처리
-                        bubble.Fall();
+                       // 바닥에 닿으면 GameOver 처리
                     }
                 }
             }
         }
+        // 천장 기준 row 갱신
+        ceilingRow += moveRows;
+        if (ceilingRow >= rows) ceilingRow = rows - 1;
+
     }
+
 
     //========================================================================
     // Scene 뷰에서 그리드 시각화

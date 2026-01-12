@@ -5,13 +5,14 @@ using UnityEngine;
 public class Bubble : MonoBehaviour
 {
     public enum BubbleState { Idle, Fired, Falling }
+    public enum BubbleColor { Red, Orange, Yellow, Green, Blue, Navy, Violet }
     public BubbleState State { get; private set; }
+    public BubbleColor Color => bubbleColor;
 
-    [SerializeField] private string bubbleColor;
+    [SerializeField] private BubbleColor bubbleColor;
     private Rigidbody2D _rb;
     private Collider2D _col;
 
-    public string Color => bubbleColor;
     public GameObject PrefabReference { get; private set; }
 
     private void Awake()
