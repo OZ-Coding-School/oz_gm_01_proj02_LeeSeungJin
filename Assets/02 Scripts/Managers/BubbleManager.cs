@@ -33,10 +33,16 @@ public class BubbleManager : Singleton<BubbleManager>
     {
         if (!IsValidCell(row, col)) return;
 
-        grid[row, col] = bubble;
-        bubble.transform.position = GridToWorld(row, col);
+        int targetRow = row; // 같은 자리에 배치되는 버그 픽스
+        while (targetRow < rows && grid[targetRow, col] != null)
+        {
+            targetRow++;
+        }
 
-        bool matched = CheckMatch(row, col);
+        grid[targetRow, col] = bubble;
+        bubble.transform.position = GridToWorld(targetRow, col);
+
+        bool matched = CheckMatch(targetRow, col);
         if (matched) HandleFloatingBubbles();
 
         bubbleAttachedThisTurn = true; // 이번 턴에 붙음 표시
@@ -228,7 +234,52 @@ public class BubbleManager : Singleton<BubbleManager>
         // 천장 기준 row 갱신
         ceilingRow += moveRows;
         if (ceilingRow >= rows) ceilingRow = rows - 1;
+    }
 
+    // 모든 버블 제거
+    public void ClearAllBubbles()
+    {
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < cols; c++)
+            {
+                if (grid[r, c] != null)
+                {
+                    grid[r, c].ReturnToPool();
+                    grid[r, c] = null;
+                }
+            }
+        }
+    }
+
+    // 라운드 데이터에 따라 버블 배치
+    public void SpawnRound(RoundData roundData)
+    {
+        for (int i = 0; i < roundData.positions.Length; i++)
+        {
+            Vector2Int pos = roundData.positions[i];
+            Bubble.BubbleColor color = roundData.colors[i];
+
+            // 프리팹 선택 (색상에 맞는 프리팹을 가져오는 로직 필요)
+            GameObject prefab = BubblePrefabLibrary.Instance.GetPrefab(color);
+
+            Bubble bubble = Bubble.CreateFromPool(prefab, GridToWorld(pos.x, pos.y), Quaternion.identity);
+            RegisterBubble(bubble, pos.x, pos.y);
+        }
+    }
+
+    // 모든 버블이 제거되었는지 확인 (라운드 종료 조건)
+    public bool AllCleared()
+    {
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < cols; c++)
+            {
+                if (grid[r, c] != null)
+                    return false;
+            }
+        }
+        return true;
     }
 
 

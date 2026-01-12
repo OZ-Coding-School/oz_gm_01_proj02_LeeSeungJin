@@ -25,5 +25,8 @@ public class MainMenuDotween : MonoBehaviour
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
     }
-
+    private void OnDestroy()
+    {
+        DOTween.KillAll();
+    }
 }

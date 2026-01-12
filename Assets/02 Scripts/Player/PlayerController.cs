@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BubbleTrajectory trajectory;
 
     private GameObject currentBubblePrefab;
+    private bool canFire = true;
 
     private void Start()
     {
@@ -50,12 +51,14 @@ public class PlayerController : MonoBehaviour
 
     private void FireBubble()
     {
+        if (!canFire) return;
         // 현재 준비된 버블 발사
         Bubble bubble = Bubble.CreateFromPool(currentBubblePrefab, firePoint.position, Quaternion.identity);
         bubble.Fire(transform.up, bubbleSpeed);
 
         // 발사 직후 바로 다음 버블 준비 → 항상 발사 가능
         PrepareCurrentBubble();
+        canFire = false;
     }
 
     private void PrepareCurrentBubble()
@@ -69,4 +72,9 @@ public class PlayerController : MonoBehaviour
             previewImage.sprite = sr.sprite;
         }
     }
+    public void SetCanFire(bool canFire)
+    {
+        this.canFire = canFire;
+    }
+
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private PlayerController player;
     private void OnEnable()
     {
         Bubble.OnBubbleAttachedOnce += HandleBubbleAttached;
@@ -16,6 +17,7 @@ public class GameController : MonoBehaviour
     {
         // 버블이 붙으면 턴 종료 처리
         EndTurn();
+        player.SetCanFire(true);
     }
 
     private void EndTurn()
