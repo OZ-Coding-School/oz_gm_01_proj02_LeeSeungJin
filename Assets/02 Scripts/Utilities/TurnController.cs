@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class TurnController : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
     private void OnEnable()

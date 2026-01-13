@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public enum GameState { None, Playing, Paused, GameOver }
+    public enum GameState { None, Playing, Paused, GameEnd }
     public GameState CurrentState { get; private set; } = GameState.None;
 
     private int score;
@@ -42,15 +42,16 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 게임 종료
-    public void EndGame()
+    public void EndGame(bool gameClear)
     {
-        CurrentState = GameState.GameOver;
+        CurrentState = GameState.GameEnd;
     }
 
     // 점수 추가
     public void AddScore(int amount)
     {
         score += amount;
+        Debug.Log($"점수 : {score}");
     }
 
     // 현재 점수 가져오기

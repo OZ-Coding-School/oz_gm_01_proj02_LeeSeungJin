@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class BubbleManager : Singleton<BubbleManager>
@@ -115,6 +116,8 @@ public class BubbleManager : Singleton<BubbleManager>
         }
         if (connected.Count >= 3)
         {
+            //점수 추가
+            GameManager.Instance.AddScore(connected.Count * connected.Count * 100);
             foreach (var (r, c) in connected)
             {
                 Bubble bubble = grid[r, c];
@@ -166,7 +169,6 @@ public class BubbleManager : Singleton<BubbleManager>
                 MarkConnectedDFS(ceilingRow, c, visited);
             }
         }
-
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < cols; c++)
@@ -176,6 +178,8 @@ public class BubbleManager : Singleton<BubbleManager>
                     Bubble bubble = grid[r, c];
                     grid[r, c] = null;
                     bubble.Fall();
+                    //점수 추가
+                    GameManager.Instance.AddScore(100);
                 }
             }
         }

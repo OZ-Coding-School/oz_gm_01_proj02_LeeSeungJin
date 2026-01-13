@@ -48,19 +48,19 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     public void OnBubbleAttached()
     {
         attachCount++;
-        attachTimer = 0f;
+        attachTimer = attachTimeLimit;
         if (attachCount == attachPerPressure - 2)
             Camera.main.transform.DOShakePosition(
-                duration: 0.5f,
-                strength: 0.1f,
-                vibrato: 10,
+                duration: 1f,
+                strength: 0.05f,
+                vibrato: 20,
                 randomness: 90f
                 ).SetLoops(-1, LoopType.Restart);
         if (attachCount == attachPerPressure - 1)
             Camera.main.transform.DOShakePosition(
                 duration: 0.5f,
-                strength: 0.3f,
-                vibrato: 10,
+                strength: 0.15f,
+                vibrato: 30,
                 randomness: 90f
                 ).SetLoops(-1, LoopType.Restart);
 
@@ -68,8 +68,7 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
         {
             attachCount = 0;
             pendingPressure = true; // 다음 프레임에서 압박 실행
-            DOTween.Kill(Camera.main.transform);
-            Camera.main.transform.position = new Vector3(0, 0, -10);
+            InitCamera();
         }
     }
 
@@ -77,6 +76,13 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     public void Init()
     {
         transform.position = initPosition;
-        attachTimer = 0f;
+        attachTimer = attachTimeLimit;
+        attachCount = 0;
+        InitCamera();
+    }
+    private void InitCamera()
+    {
+        DOTween.Kill(Camera.main.transform);
+        Camera.main.transform.position = new Vector3(0, 0, -10);
     }
 }

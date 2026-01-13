@@ -1497,7 +1497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0286436a2f2d4cd4b841fd0620193ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attachPerPressure: 10
+  attachPerPressure: 11
   attachTimeLimit: 10
   moveRows: 2
   cellSize: 0.66
@@ -2444,12 +2444,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'ROUND CLEAR
-
-
-    GET 12345
-
-    BONUS POINTS'
+  m_Text: 
 --- !u!1 &1246818739
 GameObject:
   m_ObjectHideFlags: 0

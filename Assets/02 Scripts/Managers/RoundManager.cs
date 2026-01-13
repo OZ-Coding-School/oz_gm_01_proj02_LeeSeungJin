@@ -62,11 +62,12 @@ public class RoundManager : Singleton<RoundManager>
             currentRound++;
             yield return new WaitForSeconds(3.0f);
             roundClearText.gameObject.SetActive(false);
+            roundClearText.text = "";
         }
 
         // 모든 라운드 클리어
         player.SetCanFire(false);
-        GameManager.Instance.EndGame();
+        GameManager.Instance.EndGame(true);
     }
 
     private void OnDestroy()
