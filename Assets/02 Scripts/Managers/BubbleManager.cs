@@ -12,8 +12,6 @@ public class BubbleManager : Singleton<BubbleManager>
     // 그리드 원점 조정
     [SerializeField] private Vector2 gridOrigin = Vector2.zero;
 
-    [SerializeField] private WallPressureSystem wallPressureSystem;
-
     private Bubble[,] grid;
     private int ceilingRow = 0;
     private bool bubbleAttachedThisTurn = false;
@@ -236,8 +234,8 @@ public class BubbleManager : Singleton<BubbleManager>
         if (ceilingRow >= rows) ceilingRow = rows - 1;
     }
 
-    // 모든 버블 제거
-    public void ClearAllBubbles()
+    // 모든 버블 제거 및 초기화
+    public void InitGrid()
     {
         for (int r = 0; r < rows; r++)
         {
@@ -250,6 +248,7 @@ public class BubbleManager : Singleton<BubbleManager>
                 }
             }
         }
+        ceilingRow = 0;
     }
 
     // 라운드 데이터에 따라 버블 배치

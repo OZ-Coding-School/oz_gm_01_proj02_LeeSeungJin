@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class WallPressureSystem : Singleton<WallPressureSystem>
@@ -8,19 +9,29 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     [SerializeField] private float cellSize = 0.65f;
 
     private int attachCount = 0;
-    private float attachTimer = 0f;
+    private float attachTimer;
     private bool pendingPressure = false;
+    private bool timerOn = false;
+    private Vector2 initPosition;
 
     protected override bool IsDDOL => false;
+    public bool TimerOn { get { return timerOn; } set { timerOn = value; } }
 
+    private void Start()
+    {
+        initPosition = transform.position;
+        attachTimer = attachTimeLimit;
+    }
     private void Update()
     {
+        if (!timerOn) return;
+
         // 시간 제한 체크
-        attachTimer += Time.deltaTime;
-        if (attachTimer >= attachTimeLimit)
+        attachTimer -= Time.deltaTime;
+        if (attachTimer <= 0f)
         {
             pendingPressure = true;
-            attachTimer = 0f;
+            attachTimer = attachTimeLimit;
         }
 
         // 예약된 압박 실행
@@ -38,11 +49,34 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     {
         attachCount++;
         attachTimer = 0f;
+        if (attachCount == attachPerPressure - 2)
+            Camera.main.transform.DOShakePosition(
+                duration: 0.5f,
+                strength: 0.1f,
+                vibrato: 10,
+                randomness: 90f
+                ).SetLoops(-1, LoopType.Restart);
+        if (attachCount == attachPerPressure - 1)
+            Camera.main.transform.DOShakePosition(
+                duration: 0.5f,
+                strength: 0.3f,
+                vibrato: 10,
+                randomness: 90f
+                ).SetLoops(-1, LoopType.Restart);
 
         if (attachCount >= attachPerPressure)
         {
             attachCount = 0;
             pendingPressure = true; // 다음 프레임에서 압박 실행
+            DOTween.Kill(Camera.main.transform);
+            Camera.main.transform.position = new Vector3(0, 0, -10);
         }
+    }
+
+    //라운드 종료 후 초기화
+    public void Init()
+    {
+        transform.position = initPosition;
+        attachTimer = 0f;
     }
 }
