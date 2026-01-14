@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 public class WallPressureSystem : Singleton<WallPressureSystem>
@@ -7,11 +8,15 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     [SerializeField] private float attachTimeLimit = 10f; // 제한 시간
     [SerializeField] private int moveRows = 2; // 압박 시 내려올 칸 수
     [SerializeField] private float cellSize = 0.65f;
+    [SerializeField] private RectTransform LimitTimer;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject hurryUp;
 
     private int attachCount = 0;
     private float attachTimer;
     private bool pendingPressure = false;
     private bool timerOn = false;
+    private bool timerDOT = false;
     private Vector2 initPosition;
 
     protected override bool IsDDOL => false;
@@ -26,8 +31,29 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     {
         if (!timerOn) return;
 
+        // 타이머 동작
+        if (attachTimer < 3f)
+        {
+            if (!timerDOT)
+            {
+                timerDOT = true;
+                RotateTimer();
+            }
+        }
+        else
+        {
+            if (timerDOT)
+            {
+                DOTween.Kill(LimitTimer);
+                LimitTimer.rotation = Quaternion.identity;
+                hurryUp.SetActive(false);
+            }
+            timerDOT = false;
+        }
+
         // 시간 제한 체크
         attachTimer -= Time.deltaTime;
+        timerText.text = attachTimer.ToString("F0");
         if (attachTimer <= 0f)
         {
             pendingPressure = true;
@@ -84,5 +110,12 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     {
         DOTween.Kill(Camera.main.transform);
         Camera.main.transform.position = new Vector3(0, 0, -10);
+    }
+    private void RotateTimer()
+    {
+        hurryUp.SetActive(true);
+        LimitTimer.DORotate(new Vector3(0, 0, 20), 0.1f, RotateMode.Fast)
+                 .SetLoops(-1, LoopType.Yoyo)
+                 .SetEase(Ease.InOutSine);
     }
 }

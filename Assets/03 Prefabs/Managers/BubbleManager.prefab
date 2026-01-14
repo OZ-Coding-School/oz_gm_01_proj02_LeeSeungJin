@@ -52,7 +52,7 @@ MonoBehaviour:
   - {fileID: 8942112753863453438, guid: 6194af3cdae8b344b95ec25afa31dca1, type: 3}
   - {fileID: 3216547387004765693, guid: 8ca81dff48a0bc64cbf0584d4ee96eae, type: 3}
   - {fileID: 7568707212635654600, guid: a9abce915a7c9bb42a56a6ebf789c162, type: 3}
-  rows: 11
-  cols: 9
-  cellSize: 0.7
-  gridOrigin: {x: -2.5, y: 4.3}
+  rows: 12
+  cols: 10
+  cellSize: 0.65
+  gridOrigin: {x: -2.5, y: 4.2}

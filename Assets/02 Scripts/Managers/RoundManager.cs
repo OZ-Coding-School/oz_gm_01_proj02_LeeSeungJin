@@ -14,7 +14,7 @@ public class RoundManager : Singleton<RoundManager>
     [SerializeField] private PlayerController player;
     [SerializeField] private RoundData[] rounds; // 라운드별 버블 배치 데이터
 
-    private int currentRound = 0;
+    private int currentRound = 1;
     public int CurrentRound => currentRound;
     protected override bool IsDDOL => false;
 
@@ -28,7 +28,7 @@ public class RoundManager : Singleton<RoundManager>
         while (currentRound < rounds.Length)
         {
             // 1. Ready 표시
-            currentRoundText.text = $"ROUND {currentRound+1}";
+            currentRoundText.text = $"ROUND {currentRound}";
             player.SetCanFire(false);
             readySprite.SetActive(true);
             readySprite.transform.DOMove(new Vector3(0,0.3f,0), 1f).SetEase(Ease.OutBounce);
@@ -53,16 +53,20 @@ public class RoundManager : Singleton<RoundManager>
 
             // 라운드 클리어 -> 초기화 -> 다음 라운드 준비
             roundClearText.gameObject.SetActive(true);
-            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{(currentRound + 1) * 7000}";
+            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 11111}";
             roundClearText.DOText(tmp, 2f, false, ScrambleMode.None);
 
             WallPressureSystem.Instance.TimerOn = false;
             BubbleManager.Instance.InitGrid();
             WallPressureSystem.Instance.Init();
-            currentRound++;
             yield return new WaitForSeconds(3.0f);
+            UIManager.Instance.AddScore(currentRound * 11111);
             roundClearText.gameObject.SetActive(false);
             roundClearText.text = "";
+            currentRound++;
+
+            if (currentRound == 4) Background.FadeOutBG(0);
+            if (currentRound == 7) Background.FadeOutBG(1);
         }
 
         // 모든 라운드 클리어

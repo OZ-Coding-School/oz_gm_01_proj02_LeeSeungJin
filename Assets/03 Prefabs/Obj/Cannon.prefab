@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 200
-  minAngle: -60
-  maxAngle: 60
+  minAngle: -65
+  maxAngle: 65
   bubbleSpeed: 10
   firePoint: {fileID: 5854630089426823267}
   bubblePrefab:
@@ -112,6 +112,8 @@ MonoBehaviour:
   - {fileID: 8942112753863453438, guid: 6194af3cdae8b344b95ec25afa31dca1, type: 3}
   - {fileID: 3216547387004765693, guid: 8ca81dff48a0bc64cbf0584d4ee96eae, type: 3}
   - {fileID: 7568707212635654600, guid: a9abce915a7c9bb42a56a6ebf789c162, type: 3}
+  previewImage: {fileID: 0}
+  trajectory: {fileID: 0}
 --- !u!1 &6220995776899933065
 GameObject:
   m_ObjectHideFlags: 0

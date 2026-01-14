@@ -76,7 +76,9 @@ public class BubbleManager : Singleton<BubbleManager>
         float offset = (row % 2 == 1) ? cellSize * 0.5f : 0f;
         float x = gridOrigin.x + col * cellSize + offset;
         float y = gridOrigin.y - row * cellSize;
+
         return new Vector2(x, y);
+
     }
 
     private bool IsValidCell(int row, int col)
@@ -117,7 +119,7 @@ public class BubbleManager : Singleton<BubbleManager>
         if (connected.Count >= 3)
         {
             //점수 추가
-            GameManager.Instance.AddScore(connected.Count * connected.Count * 100);
+            UIManager.Instance.AddScore(connected.Count * connected.Count * 100);
             foreach (var (r, c) in connected)
             {
                 Bubble bubble = grid[r, c];
@@ -179,7 +181,7 @@ public class BubbleManager : Singleton<BubbleManager>
                     grid[r, c] = null;
                     bubble.Fall();
                     //점수 추가
-                    GameManager.Instance.AddScore(100);
+                    UIManager.Instance.AddScore(100);
                 }
             }
         }
