@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     private GameObject currentBubblePrefab;
     private bool canFire = true;
+    private bool canKeyInput = true;
 
     private void Start()
     {
@@ -24,11 +25,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!canKeyInput) return;
         HandleInput();
     }
 
     private void FixedUpdate()
     {
+        if (!canKeyInput) 
+        {
+            trajectory.HideTrajectory();
+            return; 
+        }
         // 발사 궤적은 물리 주기에서 갱신
         trajectory.ShowTrajectory(firePoint.position, transform.up, bubbleSpeed);
     }
@@ -56,7 +63,7 @@ public class PlayerController : MonoBehaviour
         Bubble bubble = Bubble.CreateFromPool(currentBubblePrefab, firePoint.position, Quaternion.identity);
         bubble.Fire(transform.up, bubbleSpeed);
 
-        // 발사 직후 바로 다음 버블 준비 → 항상 발사 가능
+        // 발사 직후 바로 다음 버블 준비
         PrepareCurrentBubble();
         canFire = false;
     }
@@ -75,6 +82,10 @@ public class PlayerController : MonoBehaviour
     public void SetCanFire(bool canFire)
     {
         this.canFire = canFire;
+    }
+    public void SetCanKeyInput(bool canKeyInput)
+    {
+        this.canKeyInput = canKeyInput;
     }
 
 }

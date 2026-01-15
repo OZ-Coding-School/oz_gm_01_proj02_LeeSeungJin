@@ -10,6 +10,7 @@ public class MainMenuDotween : MonoBehaviour
     [SerializeField] private GameObject pressStart;
     private void Start()
     {
+        Time.timeScale = 1f;
         // Title 위아래 반복
         title.transform.DOMoveY(title.transform.position.y + 0.5f, 2f)
             .SetLoops(-1, LoopType.Yoyo)

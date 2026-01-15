@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
 {
+    protected override bool IsDDOL => false;
+
     private Dictionary<string, Queue<GameObject>> poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
     public void CreatePool(GameObject prefab, int size)

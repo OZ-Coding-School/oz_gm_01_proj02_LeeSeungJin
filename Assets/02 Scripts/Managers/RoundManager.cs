@@ -25,11 +25,13 @@ public class RoundManager : Singleton<RoundManager>
 
     private IEnumerator RunRoundRoutine()
     {
-        while (currentRound < rounds.Length)
+        GameManager.Instance.StartGame();
+
+        while (currentRound - 1 < rounds.Length)
         {
             // 1. Ready 표시
+            PlayerKeyEnable(false);
             currentRoundText.text = $"ROUND {currentRound}";
-            player.SetCanFire(false);
             readySprite.SetActive(true);
             readySprite.transform.DOMove(new Vector3(0,0.3f,0), 1f).SetEase(Ease.OutBounce);
             yield return new WaitForSeconds(2.0f);
@@ -42,25 +44,26 @@ public class RoundManager : Singleton<RoundManager>
             startSprite.SetActive(false);
 
             // 3. 버블 배치
-            BubbleManager.Instance.SpawnRound(rounds[currentRound]);
+            BubbleManager.Instance.SpawnRound(rounds[currentRound - 1]);
 
             // 4. 발사 가능
-            player.SetCanFire(true);
+            PlayerKeyEnable(true);
             WallPressureSystem.Instance.TimerOn = true;
 
             // 5. 라운드 종료 대기
             yield return new WaitUntil(() => BubbleManager.Instance.AllCleared());
+            PlayerKeyEnable(false);
 
             // 라운드 클리어 -> 초기화 -> 다음 라운드 준비
             roundClearText.gameObject.SetActive(true);
-            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 11111}";
+            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777}";
             roundClearText.DOText(tmp, 2f, false, ScrambleMode.None);
 
             WallPressureSystem.Instance.TimerOn = false;
-            BubbleManager.Instance.InitGrid();
             WallPressureSystem.Instance.Init();
+            BubbleManager.Instance.InitGrid();
             yield return new WaitForSeconds(3.0f);
-            UIManager.Instance.AddScore(currentRound * 11111);
+            UIManager.Instance.AddScore(currentRound * 7777);
             roundClearText.gameObject.SetActive(false);
             roundClearText.text = "";
             currentRound++;
@@ -70,10 +73,14 @@ public class RoundManager : Singleton<RoundManager>
         }
 
         // 모든 라운드 클리어
-        player.SetCanFire(false);
-        GameManager.Instance.EndGame(true);
+        PlayerKeyEnable(false);
+        UIManager.Instance.ShowGameResult(true);
     }
 
+    public void PlayerKeyEnable(bool tf)
+    {
+        player.SetCanKeyInput(tf);
+    }
     private void OnDestroy()
     {
         DOTween.KillAll();

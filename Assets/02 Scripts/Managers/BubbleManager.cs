@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BubbleManager : Singleton<BubbleManager>
 {
+    protected override bool IsDDOL => false;
+
     [SerializeField] private GameObject[] bubblePrefab;
     [SerializeField] private int rows = 12;
     [SerializeField] private int cols = 8;

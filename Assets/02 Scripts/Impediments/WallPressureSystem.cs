@@ -66,7 +66,6 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
             pendingPressure = false;
             BubbleManager.Instance.ApplyPressure(moveRows);
             transform.position += cellSize * moveRows * Vector3.down;
-            Debug.Log("벽 압박 발생!");
         }
     }
 
@@ -75,6 +74,8 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
     {
         attachCount++;
         attachTimer = attachTimeLimit;
+
+        // 벽 내려오기 전 진동
         if (attachCount == attachPerPressure - 2)
             Camera.main.transform.DOShakePosition(
                 duration: 1f,
@@ -106,7 +107,7 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
         attachCount = 0;
         InitCamera();
     }
-    private void InitCamera()
+    public void InitCamera()
     {
         DOTween.Kill(Camera.main.transform);
         Camera.main.transform.position = new Vector3(0, 0, -10);

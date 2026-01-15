@@ -8,9 +8,7 @@ public class FloorCheck : MonoBehaviour
     {
         if (other.CompareTag("Bubble"))
         {
-            Debug.Log("버블이 바닥에 닿음 → Game Over!");
-            GameManager.Instance.EndGame(false);
-            // 게임 오버 처리 필요
+            UIManager.Instance.ShowGameResult(false);
         }
     }
 }
