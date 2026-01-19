@@ -45,7 +45,9 @@ public class NameInputAssistant : MonoBehaviour
         {
             string playerName = new string(letters);
             // 랭킹 등록 호출
-            FindObjectOfType<RankingSystem>().TryAddScore(playerName, RoundManager.Instance.CurrentRound, GameManager.Instance.GetScore());
+            RankingSystem.Instance.TryAddScore(playerName, RoundManager.Instance.CurrentRound, GameManager.Instance.GetScore());
+            RankingSystem.Instance.InputCompleted = true;
+            gameObject.SetActive(false);
         }
     }
 

@@ -9,6 +9,8 @@ public class RankingSystem : Singleton<RankingSystem>
     private List<RankingData> rankingList = new List<RankingData>();
     private const int MAX_RANK = 5;
 
+    public bool InputCompleted { get; set; } = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -23,12 +25,14 @@ public class RankingSystem : Singleton<RankingSystem>
 
         // 점수 높은 순으로 정렬 후 상위 5개만 유지
         rankingList = rankingList.OrderByDescending(r => r.score)
+                                 .ThenByDescending(r => r.score)
                                  .Take(MAX_RANK)
                                  .ToList();
+
         // 랭크 매기기
-        foreach( var rl in rankingList)
+        int setRank = 1;
+        foreach ( var rl in rankingList)
         {
-            int setRank = 1;
             rl.rank = setRank;
             setRank++;
         }
@@ -54,11 +58,21 @@ public class RankingSystem : Singleton<RankingSystem>
             RankingWrapper wrapper = JsonUtility.FromJson<RankingWrapper>(json);
             rankingList = wrapper.rankings;
         }
+        else
+        {
+            RankingWrapper wrapper = new RankingWrapper();
+            rankingList = wrapper.GetDefault();
+        }
     }
 
     // 현재 랭킹 리스트 반환
     public List<RankingData> GetRanking()
     {
         return rankingList;
+    }
+
+    public int GetMAXRank() 
+    {
+        return MAX_RANK;
     }
 }

@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e89a9c386feeb48419ee14204783d758
+  m_SerializeEntries:
+  - m_GUID: 33c2669e04e174f4ca7d56e9ba7e6991
+    m_Address: SFX_ButtonClick
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d933f18de4c67d49985f72e6416d33d
+    m_Address: SFX_GameClear
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62b39691add23224da413d96b65df24c
+    m_Address: BGM_Game
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79aa3ecb97f444e4baac18bf00672b26
+    m_Address: SFX_CeilingDown
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d61810e2a3301d4780ef9cd89668e86
+    m_Address: SFX_Warning
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9239feae69406694c90af446ae3af607
+    m_Address: SFX_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a51e33f2eb73c4945a2f4ea4171e7b3b
+    m_Address: SFX_BubblePop
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7a5d8922f36c074cb5d1101a302d514
+    m_Address: SFX_GameStart
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d30c06d12e475744eb619939557d5498
+    m_Address: SFX_GameOver
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d57e63b70438e4940849b9f5132ce117
+    m_Address: BGM_Main
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e86d6dd4b3d8f474994e40faa1be2db2
+    m_Address: SFX_FireBubble
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1da44ce7ced0e242aca6565d62d9ead
+    m_Address: SFX_AttachBubble
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 28591f0717a5d034983963bef5fd1199, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 05c873f0c1250394489428244313f8b7, type: 2}
+    - {fileID: 11400000, guid: 563946b305449fe4c8e82b3c67c67751, type: 2}

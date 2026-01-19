@@ -32,7 +32,7 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
         if (!timerOn) return;
 
         // 타이머 동작
-        if (attachTimer < 3f)
+        if (attachTimer < 4f)
         {
             if (!timerDOT)
             {

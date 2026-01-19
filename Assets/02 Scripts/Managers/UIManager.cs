@@ -79,11 +79,16 @@ public class UIManager : Singleton<UIManager>
             gameEndView.ApplyGameClearEffect();
             yield return new WaitForSeconds(4f);
         }
+        
+        string tmp = GameManager.Instance.EndGame(gameClear);
+        if (rankingModel.IsHighRecord())
+        {
+            rankingView.ShowInputNamePanel();
+            yield return new WaitUntil(() => RankingSystem.Instance.InputCompleted);
+        }
+        rankingView.UpdateRankingList(rankingModel.GetRankingList());
 
-        resultView.ShowResult(
-            GameManager.Instance.EndGame(gameClear),
-            GameManager.Instance.GetScore()
-            );
+        resultView.ShowResult(tmp, GameManager.Instance.GetScore());
     }
 
     // 게임 모드 선택창 보여주기
