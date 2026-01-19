@@ -25,7 +25,7 @@ public class RoundManager : Singleton<RoundManager>
 
     private IEnumerator RunRoundRoutine()
     {
-        GameManager.Instance.StartGame();
+        UIManager.Instance.ShowGameMode();
 
         while (currentRound - 1 < rounds.Length)
         {
@@ -56,7 +56,7 @@ public class RoundManager : Singleton<RoundManager>
 
             // 라운드 클리어 -> 초기화 -> 다음 라운드 준비
             roundClearText.gameObject.SetActive(true);
-            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777}";
+            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777 * (int)GameManager.Instance.CurrentState}";
             roundClearText.DOText(tmp, 2f, false, ScrambleMode.None);
 
             WallPressureSystem.Instance.TimerOn = false;

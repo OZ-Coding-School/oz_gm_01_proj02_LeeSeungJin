@@ -7,7 +7,8 @@ public class BubbleManager : Singleton<BubbleManager>
 {
     protected override bool IsDDOL => false;
 
-    [SerializeField] private GameObject[] bubblePrefab;
+    [SerializeField] private GameObject[] bubblePrefabs;
+    [SerializeField] private GameObject bubblePopPrefab;
     [SerializeField] private int rows = 12;
     [SerializeField] private int cols = 8;
     [SerializeField] private float cellSize = 0.5f;
@@ -18,15 +19,17 @@ public class BubbleManager : Singleton<BubbleManager>
     private Bubble[,] grid;
     private int ceilingRow = 0;
     private bool bubbleAttachedThisTurn = false;
+    private GameObject tmpBubblePop;
 
     protected override void Awake()
     {
         base.Awake();
         grid = new Bubble[rows, cols];
-        foreach (var bubble in bubblePrefab)
+        foreach (var bubble in bubblePrefabs)
         {
             PoolManager.Instance.CreatePool(bubble, 30);
         }
+        PoolManager.Instance.CreatePool(bubblePopPrefab, 10);
     }
 
     // 버블 등록
@@ -41,7 +44,9 @@ public class BubbleManager : Singleton<BubbleManager>
         }
 
         grid[targetRow, col] = bubble;
-        bubble.transform.position = GridToWorld(targetRow, col);
+
+        bubble.transform.position = GridToWorld(targetRow, col); // 위치 스냅
+        bubble.transform.SetParent(transform);
 
         bool matched = CheckMatch(targetRow, col);
         if (matched) HandleFloatingBubbles();
@@ -127,6 +132,8 @@ public class BubbleManager : Singleton<BubbleManager>
                 Bubble bubble = grid[r, c];
                 if (bubble != null)
                 {
+                    tmpBubblePop = bubblePopPrefab;
+                    BubblePopEffect effect = BubblePopEffect.CreateFromPool(tmpBubblePop, grid[r,c].transform.position, Quaternion.identity);
                     bubble.ReturnToPool();
                     grid[r, c] = null;
                 }

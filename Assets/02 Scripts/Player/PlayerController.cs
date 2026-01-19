@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canKeyInput) 
+        if (!canKeyInput || GameManager.Instance.CurrentState == GameManager.GameMode.NoTrajectory) 
         {
             trajectory.HideTrajectory();
             return; 

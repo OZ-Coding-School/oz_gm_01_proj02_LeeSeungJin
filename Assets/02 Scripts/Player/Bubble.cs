@@ -122,10 +122,6 @@ public class Bubble : MonoBehaviour
 
         // 등록 및 매치/낙하 처리
         BubbleManager.Instance.RegisterBubble(this, row, col);
-
-        // 위치 스냅
-        transform.position = BubbleManager.Instance.GridToWorld(row, col);
-        transform.SetParent(BubbleManager.Instance.transform);
     }
 
     public void Fall()
