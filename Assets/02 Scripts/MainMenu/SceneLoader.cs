@@ -16,6 +16,7 @@ public class SceneLoader : MonoBehaviour
         if (!isLoading && Input.GetKeyDown(KeyCode.Return))
         {
             isLoading = true;
+            AudioManager.Instance.PlaySFX("SFX_GameStart");
             StartCoroutine(LoadSceneAsync(nextSceneName));
         }
     }

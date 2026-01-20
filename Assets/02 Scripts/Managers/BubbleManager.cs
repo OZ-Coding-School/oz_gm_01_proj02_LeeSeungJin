@@ -127,6 +127,7 @@ public class BubbleManager : Singleton<BubbleManager>
         {
             //점수 추가
             UIManager.Instance.AddScore(connected.Count * connected.Count * 100);
+            AudioManager.Instance.PlaySFX("SFX_BubblePop");
             foreach (var (r, c) in connected)
             {
                 Bubble bubble = grid[r, c];

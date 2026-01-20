@@ -13,6 +13,7 @@ public class RoundManager : Singleton<RoundManager>
     [SerializeField] private GameObject startSprite;
     [SerializeField] private PlayerController player;
     [SerializeField] private RoundData[] rounds; // 라운드별 버블 배치 데이터
+    [SerializeField] private Octopus bossOctopus;
 
     private int currentRound = 1;
     public int CurrentRound => currentRound;
@@ -29,9 +30,19 @@ public class RoundManager : Singleton<RoundManager>
 
         while (currentRound - 1 < rounds.Length)
         {
-            // 1. Ready 표시
+            // 게임 모드 선택 대기
             PlayerKeyEnable(false);
             currentRoundText.text = $"ROUND {currentRound}";
+            yield return new WaitUntil(() => GameManager.Instance.CurrentState != GameManager.GameMode.None);
+
+            // 보스 라운드
+            if (currentRound == rounds.Length)
+            {
+               yield return StartCoroutine(bossOctopus.WarningCo());
+            }
+
+            // 1. Ready 표시
+            AudioManager.Instance.PlaySFX("SFX_Ready");
             readySprite.SetActive(true);
             readySprite.transform.DOMove(new Vector3(0,0.3f,0), 1f).SetEase(Ease.OutBounce);
             yield return new WaitForSeconds(2.0f);
@@ -40,10 +51,13 @@ public class RoundManager : Singleton<RoundManager>
 
             // 2. Start 표시
             startSprite.SetActive(true);
+            AudioManager.Instance.PlaySFX("SFX_Go");
             yield return new WaitForSeconds(1.0f);
             startSprite.SetActive(false);
 
             // 3. 버블 배치
+            if (currentRound == rounds.Length) StartCoroutine(bossOctopus.SpitOutInkCo());
+
             BubbleManager.Instance.SpawnRound(rounds[currentRound - 1]);
 
             // 4. 발사 가능
@@ -56,7 +70,8 @@ public class RoundManager : Singleton<RoundManager>
 
             // 라운드 클리어 -> 초기화 -> 다음 라운드 준비
             roundClearText.gameObject.SetActive(true);
-            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777 * (int)GameManager.Instance.CurrentState}";
+            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777 * (int)GameManager.Instance.CurrentState}"
+                +$"\n\nBONUS REROLLS + {currentRound}";
             roundClearText.DOText(tmp, 2f, false, ScrambleMode.None);
 
             WallPressureSystem.Instance.TimerOn = false;
@@ -64,6 +79,7 @@ public class RoundManager : Singleton<RoundManager>
             BubbleManager.Instance.InitGrid();
             yield return new WaitForSeconds(3.0f);
             UIManager.Instance.AddScore(currentRound * 7777);
+            player.AddRemaingRerolls(currentRound);
             roundClearText.gameObject.SetActive(false);
             roundClearText.text = "";
             currentRound++;
@@ -74,6 +90,7 @@ public class RoundManager : Singleton<RoundManager>
 
         // 모든 라운드 클리어
         PlayerKeyEnable(false);
+        bossOctopus.ClearBossRound();
         UIManager.Instance.ShowGameResult(true);
     }
 

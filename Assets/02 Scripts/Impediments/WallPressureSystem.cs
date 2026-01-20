@@ -37,6 +37,7 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
             if (!timerDOT)
             {
                 timerDOT = true;
+                AudioManager.Instance.PlaySFX("SFX_ClockAlarm");
                 RotateTimer();
             }
         }
@@ -58,12 +59,15 @@ public class WallPressureSystem : Singleton<WallPressureSystem>
         {
             pendingPressure = true;
             attachTimer = attachTimeLimit;
+            attachCount = 0;
+            InitCamera();
         }
 
         // 예약된 압박 실행
         if (pendingPressure)
         {
             pendingPressure = false;
+            AudioManager.Instance.PlaySFX("SFX_CeilingDown");
             BubbleManager.Instance.ApplyPressure(moveRows);
             transform.position += cellSize * moveRows * Vector3.down;
         }

@@ -116,6 +116,8 @@ public class Bubble : MonoBehaviour
 
     private void AttachToGrid()
     {
+        AudioManager.Instance.PlaySFX("SFX_AttachBubble");
+
         // 현재 위치를 그리드 좌표로 변환
         Vector2 pos = transform.position;
         BubbleManager.Instance.WorldToGrid(pos, out int row, out int col);

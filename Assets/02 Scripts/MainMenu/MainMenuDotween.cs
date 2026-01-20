@@ -29,6 +29,7 @@ public class MainMenuDotween : MonoBehaviour
     }
     private void OnDestroy()
     {
+        AudioManager.Instance.StopBGM();
         DOTween.KillAll();
     }
 }

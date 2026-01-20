@@ -8,18 +8,21 @@ public class GameManager : Singleton<GameManager>
     private int scoreMultiple;
     private bool isGameEnd = false;
 
-    public enum GameMode { Normal = 1, NoTrajectory}
+    public enum GameMode { None, Normal, NoTrajectory}
 
     public GameMode CurrentState;
     // 점수 초기화
     public void Init()
     {
         score = 0;
+        CurrentState = GameMode.None;
     }
 
     // 게임 시작
     public void StartGame(GameMode mode)
     {
+        AudioManager.Instance.PlayBGM("BGM_Game");
+
         isGameEnd = false;
         Time.timeScale = 1f;
 
@@ -54,10 +57,18 @@ public class GameManager : Singleton<GameManager>
     // 게임 종료
     public string EndGame(bool gameClear)
     {
+        AudioManager.Instance.StopBGM();
         isGameEnd = true;
         Time.timeScale = 0f;
-        if (gameClear) return "Game Clear";
-        else return "Game Over";
+
+        if (gameClear)
+        {
+            return "Game Clear";
+        }
+        else
+        {
+            return "Game Over";
+        }
     }
 
     // 점수 추가

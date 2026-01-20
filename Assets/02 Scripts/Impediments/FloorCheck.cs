@@ -8,6 +8,7 @@ public class FloorCheck : MonoBehaviour
     {
         if (other.CompareTag("Bubble"))
         {
+            // 게임 오버
             UIManager.Instance.ShowGameResult(false);
         }
     }

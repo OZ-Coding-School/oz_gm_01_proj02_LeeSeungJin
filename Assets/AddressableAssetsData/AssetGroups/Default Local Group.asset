@@ -17,8 +17,18 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e89a9c386feeb48419ee14204783d758
   m_SerializeEntries:
+  - m_GUID: 128b42cc2347a414e8f251a627c44458
+    m_Address: SFX_Ready
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 33c2669e04e174f4ca7d56e9ba7e6991
     m_Address: SFX_ButtonClick
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49d496b9abc853c43b9029a52e18525c
+    m_Address: SFX_ClockAlarm
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -29,6 +39,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 62b39691add23224da413d96b65df24c
     m_Address: BGM_Game
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 726311a5bc2c59f43ab4789c8cff0b3d
+    m_Address: SFX_SpitOutInk
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -49,6 +64,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a51e33f2eb73c4945a2f4ea4171e7b3b
     m_Address: SFX_BubblePop
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a87ce3abe6c709d45bfa97d9864429dd
+    m_Address: SFX_Go
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1021b5390da02649b37ce6263f96369
+    m_Address: BGM_Boss
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

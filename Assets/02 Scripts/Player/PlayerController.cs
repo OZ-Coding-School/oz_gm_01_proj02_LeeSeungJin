@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,10 +14,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject[] bubblePrefab;
     [SerializeField] private Image previewImage;
     [SerializeField] private BubbleTrajectory trajectory;
+    [SerializeField] private TextMeshProUGUI remainingRerollsText;
 
     private GameObject currentBubblePrefab;
     private bool canFire = true;
     private bool canKeyInput = true;
+    private int remaingRerolls = 1;
 
     private void Start()
     {
@@ -54,11 +57,17 @@ public class PlayerController : MonoBehaviour
         {
             FireBubble();
         }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            RerollBubble();
+        }
     }
 
     private void FireBubble()
     {
         if (!canFire) return;
+
+        AudioManager.Instance.PlaySFX("SFX_FireBubble");
         // 현재 준비된 버블 발사
         Bubble bubble = Bubble.CreateFromPool(currentBubblePrefab, firePoint.position, Quaternion.identity);
         bubble.Fire(transform.up, bubbleSpeed);
@@ -68,6 +77,7 @@ public class PlayerController : MonoBehaviour
         canFire = false;
     }
 
+    // 버블 준비
     private void PrepareCurrentBubble()
     {
         currentBubblePrefab = bubblePrefab[Random.Range(0, bubblePrefab.Length)];
@@ -79,6 +89,28 @@ public class PlayerController : MonoBehaviour
             previewImage.sprite = sr.sprite;
         }
     }
+
+    // 버블 리롤
+    private void RerollBubble()
+    {
+        if (remaingRerolls < 1) return;
+
+        AudioManager.Instance.PlaySFX("SFX_ButtonClick");
+
+        GameObject tmpBubble = currentBubblePrefab;
+        while (tmpBubble == currentBubblePrefab)  // 다른 색 버블이 나올 수 있도록 하기
+        {
+            PrepareCurrentBubble();
+        }
+        remaingRerolls--;
+        remainingRerollsText.text = remaingRerolls.ToString();
+    }
+    public void AddRemaingRerolls(int rerolls)
+    {
+        remaingRerolls += rerolls;
+        remainingRerollsText.text = remaingRerolls.ToString();
+    }
+
     public void SetCanFire(bool canFire)
     {
         this.canFire = canFire;
