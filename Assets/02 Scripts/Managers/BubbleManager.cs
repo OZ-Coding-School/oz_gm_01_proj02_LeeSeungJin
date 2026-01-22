@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class BubbleManager : Singleton<BubbleManager>
@@ -237,10 +236,6 @@ public class BubbleManager : Singleton<BubbleManager>
                         grid[r, c] = null;
                         bubble.transform.position = GridToWorld(newRow, c);
                         bubble.transform.SetParent(transform);
-                    }
-                    else
-                    {
-                       // ¹Ù´Ú¿¡ ´êÀ¸¸é GameOver Ã³¸®
                     }
                 }
             }

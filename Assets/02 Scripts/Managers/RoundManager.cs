@@ -16,6 +16,10 @@ public class RoundManager : Singleton<RoundManager>
     [SerializeField] private Octopus bossOctopus;
 
     private int currentRound = 1;
+    private const int BonusScoreMultiplier = 7777;
+    private WaitForSeconds readyTime = new WaitForSeconds(2f);
+    private WaitForSeconds startTime = new WaitForSeconds(1f);
+    private WaitForSeconds roundClearTextTime = new WaitForSeconds(3f);
     public int CurrentRound => currentRound;
     protected override bool IsDDOL => false;
 
@@ -45,18 +49,18 @@ public class RoundManager : Singleton<RoundManager>
             AudioManager.Instance.PlaySFX("SFX_Ready");
             readySprite.SetActive(true);
             readySprite.transform.DOMove(new Vector3(0,0.3f,0), 1f).SetEase(Ease.OutBounce);
-            yield return new WaitForSeconds(2.0f);
+            yield return readyTime;
             readySprite.SetActive(false);
             readySprite.transform.position += Vector3.up * 5f;
 
             // 2. Start 표시
             startSprite.SetActive(true);
             AudioManager.Instance.PlaySFX("SFX_Go");
-            yield return new WaitForSeconds(1.0f);
+            yield return startTime;
             startSprite.SetActive(false);
 
             // 3. 버블 배치
-            if (currentRound == rounds.Length) StartCoroutine(bossOctopus.SpitOutInkCo());
+            if (currentRound == rounds.Length) bossOctopus.StartCoroutine(bossOctopus.SpitOutInkCo());
 
             BubbleManager.Instance.SpawnRound(rounds[currentRound - 1]);
 
@@ -70,15 +74,15 @@ public class RoundManager : Singleton<RoundManager>
 
             // 라운드 클리어 -> 초기화 -> 다음 라운드 준비
             roundClearText.gameObject.SetActive(true);
-            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * 7777 * (int)GameManager.Instance.CurrentState}"
+            string tmp = $"ROUND CLEAR\n\nBONUS POINTS\n{currentRound * BonusScoreMultiplier * (int)GameManager.Instance.CurrentState}"
                 +$"\n\nBONUS REROLLS + {currentRound}";
             roundClearText.DOText(tmp, 2f, false, ScrambleMode.None);
 
             WallPressureSystem.Instance.TimerOn = false;
             WallPressureSystem.Instance.Init();
             BubbleManager.Instance.InitGrid();
-            yield return new WaitForSeconds(3.0f);
-            UIManager.Instance.AddScore(currentRound * 7777);
+            yield return roundClearTextTime;
+            UIManager.Instance.AddScore(currentRound * BonusScoreMultiplier);
             player.AddRemaingRerolls(currentRound);
             roundClearText.gameObject.SetActive(false);
             roundClearText.text = "";

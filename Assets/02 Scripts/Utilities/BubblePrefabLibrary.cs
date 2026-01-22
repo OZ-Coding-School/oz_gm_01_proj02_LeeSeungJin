@@ -18,7 +18,6 @@ public class BubblePrefabLibrary : Singleton<BubblePrefabLibrary>
             if (entry.color == color)
                 return entry.prefab;
         }
-        Debug.LogError($"{color} ¾øÀ½!");
         return null;
     }
 }

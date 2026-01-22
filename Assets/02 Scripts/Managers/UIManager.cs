@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class UIManager : Singleton<UIManager>
 {
     protected override bool IsDDOL => false;
+    private WaitForSeconds gameOverDelay = new WaitForSeconds(2f);
+    private WaitForSeconds gameClearDelay = new WaitForSeconds(4f);
 
     private RankingModel rankingModel;
 
@@ -76,13 +78,13 @@ public class UIManager : Singleton<UIManager>
         {
             AudioManager.Instance.PlaySFX("SFX_GameOver");
             gameEndView.ApplyGameOverEffect();
-            yield return new WaitForSeconds(2f);
+            yield return gameOverDelay;
         }
         else 
         {
             AudioManager.Instance.PlaySFX("SFX_GameClear");
             gameEndView.ApplyGameClearEffect();
-            yield return new WaitForSeconds(4f);
+            yield return gameClearDelay;
         }
         
         string tmp = GameManager.Instance.EndGame(gameClear);
@@ -122,7 +124,7 @@ public class UIManager : Singleton<UIManager>
     {
         settingView.OnSettingClicked -= SettingButtonClick;
         resultView.OnRestartClicked -= RestartButtonClick;
-        resultView.OnRestartClicked -= ExitButtonClick;
+        resultView.OnExitClicked -= ExitButtonClick;
         selectModeView.OnNormalModeClicked -= NormalModeButtonClick;
         selectModeView.OnNoTrajectoryModeClicked -= NoTrajectoryModeButtonClick;
         StopAllCoroutines();

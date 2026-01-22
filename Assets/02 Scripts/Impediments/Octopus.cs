@@ -46,6 +46,8 @@ public class Octopus : MonoBehaviour
             blackInks[tmp].GetComponent<Image>().DOFade(0.1f, 5f).SetEase(Ease.InOutSine);
             yield return spitCooldown;
             blackInks[tmp].SetActive(false);
+
+            // 원래 알파값으로 되돌리기
             Color color = blackInks[tmp].GetComponent<Image>().color;
             color.a = Mathf.Clamp01(1f);
             blackInks[tmp].GetComponent<Image>().color = color;

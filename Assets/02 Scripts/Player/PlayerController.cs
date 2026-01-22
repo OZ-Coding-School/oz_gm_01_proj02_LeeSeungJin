@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
         trajectory.ShowTrajectory(firePoint.position, transform.up, bubbleSpeed);
     }
 
+    // 컨트롤러
     private void HandleInput()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -63,6 +64,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 버블 발사
     private void FireBubble()
     {
         if (!canFire) return;

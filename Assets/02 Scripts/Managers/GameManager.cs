@@ -6,11 +6,12 @@ public class GameManager : Singleton<GameManager>
 {
     private int score;
     private int scoreMultiple;
-    private bool isGameEnd = false;
+    private bool isGameEnd = true;
 
     public enum GameMode { None, Normal, NoTrajectory}
 
     public GameMode CurrentState;
+
     // 점수 초기화
     public void Init()
     {
@@ -24,6 +25,7 @@ public class GameManager : Singleton<GameManager>
         AudioManager.Instance.PlayBGM("BGM_Game");
 
         isGameEnd = false;
+
         Time.timeScale = 1f;
 
         if (mode == GameMode.Normal)
@@ -51,6 +53,9 @@ public class GameManager : Singleton<GameManager>
         if (isGameEnd) return;
 
         Time.timeScale = 1f;
+
+        if (!WallPressureSystem.Instance.TimerOn) return;
+
         RoundManager.Instance.PlayerKeyEnable(true);
     }
 
