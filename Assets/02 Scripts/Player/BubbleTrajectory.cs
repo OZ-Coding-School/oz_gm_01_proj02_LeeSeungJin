@@ -51,7 +51,7 @@ public class BubbleTrajectory : MonoBehaviour
                         normal = new Vector2(0, Mathf.Sign(normal.y));
 
                     vel = Vector2.Reflect(vel, normal);
-                    pos = hit.point + vel.normalized * 0.01f; // 살짝 앞으로 이동
+                    pos = hit.point + vel.normalized * 0.01f;
                     reflectionCount++;
                     continue;
                 }

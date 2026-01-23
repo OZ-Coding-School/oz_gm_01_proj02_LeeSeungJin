@@ -82,8 +82,10 @@ public class RoundManager : Singleton<RoundManager>
             WallPressureSystem.Instance.Init();
             BubbleManager.Instance.InitGrid();
             yield return roundClearTextTime;
+
             UIManager.Instance.AddScore(currentRound * BonusScoreMultiplier);
             player.AddRemaingRerolls(currentRound);
+
             roundClearText.gameObject.SetActive(false);
             roundClearText.text = "";
             currentRound++;
