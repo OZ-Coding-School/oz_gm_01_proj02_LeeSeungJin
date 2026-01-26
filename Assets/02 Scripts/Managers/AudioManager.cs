@@ -2,19 +2,21 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections.Generic;
 
 public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioSource sfxSource;
-
     [SerializeField] private AudioMixer mixer;
+
+    private AsyncOperationHandle<AudioClip> bgmHandle;
+    private Dictionary<string, AudioClip> sfxCache = new Dictionary<string, AudioClip>();
 
     protected override void Awake()
     {
         base.Awake();
 
-        // 실행 시 저장된 볼륨 불러오기
         float bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 1f);
         float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
@@ -22,10 +24,14 @@ public class AudioManager : Singleton<AudioManager>
         SetSFXVolume(sfxVolume);
     }
 
-    // Addressables로 BGM 로드 및 재생
+    // BGM 로드 및 재생
     public void PlayBGM(string address)
     {
-        Addressables.LoadAssetAsync<AudioClip>(address).Completed += handle =>
+        // 기존 BGM 해제
+        StopBGM();
+
+        bgmHandle = Addressables.LoadAssetAsync<AudioClip>(address);
+        bgmHandle.Completed += handle =>
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
@@ -36,38 +42,53 @@ public class AudioManager : Singleton<AudioManager>
         };
     }
 
-    // BGM 정지
+    // BGM 정지 및 언로드
     public void StopBGM()
     {
         if (bgmSource.isPlaying)
         {
             bgmSource.Stop();
         }
+
+        if (bgmHandle.IsValid())
+        {
+            Addressables.Release(bgmHandle);
+            bgmSource.clip = null;
+        }
     }
 
-    // Addressables로 SFX 로드 및 재생
+    // SFX 로드 및 재생 (캐싱)
     public void PlaySFX(string address)
     {
-        Addressables.LoadAssetAsync<AudioClip>(address).Completed += handle =>
+        if (sfxCache.TryGetValue(address, out AudioClip clip))
         {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
+            sfxSource.PlayOneShot(clip);
+        }
+        else
+        {
+            Addressables.LoadAssetAsync<AudioClip>(address).Completed += handle =>
             {
-                sfxSource.PlayOneShot(handle.Result);
-            }
-        };
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    sfxCache[address] = handle.Result;
+                    sfxSource.PlayOneShot(handle.Result);
+                }
+            };
+        }
     }
 
-    // BGM 볼륨 조절 + 저장
+    // 볼륨 관리
     public void SetBGMVolume(float volume)
     {
         mixer.SetFloat("BGMVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
         PlayerPrefs.SetFloat("BGMVolume", volume);
+        PlayerPrefs.Save();
     }
 
-    // SFX 볼륨 조절 + 저장
     public void SetSFXVolume(float volume)
     {
         mixer.SetFloat("SFXVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
     }
 }
